@@ -1,0 +1,132 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Randomly Flying Balloons</title>
+    <style>
+        body {
+            background-color: black;
+        }
+
+        .balloon-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .balloon {
+            position: absolute;
+            width: 100px;
+            height: 150px;
+            border-radius: 50%;
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        .string {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 30px solid #333; /* String color */
+            transform: translateX(-50%);
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="balloon-container">
+        <!-- JavaScript will dynamically add balloons here -->
+    </div>
+
+    <script>
+        function getRandomColor() {
+            const letters = "0123456789ABCDEF";
+            let color = "#";
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function checkCollision(newBalloon, existingBalloons) {
+            for (let i = 0; i < existingBalloons.length; i++) {
+                const existingBalloon = existingBalloons[i];
+                const distanceX = Math.abs(newBalloon.offsetLeft - existingBalloon.offsetLeft);
+                const distanceY = Math.abs(newBalloon.offsetTop - existingBalloon.offsetTop);
+                const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+                if (distance < 150) { // Adjust the value to prevent balloons from getting too close
+                    return true; // Collision detected
+                }
+            }
+            return false; // No collision detected
+        }
+
+        function createBalloon() {
+            const balloon = document.createElement("div");
+            balloon.classList.add("balloon");
+            balloon.style.backgroundColor = getRandomColor();
+
+            const string = document.createElement("div");
+            string.classList.add("string");
+            balloon.appendChild(string);
+
+            const container = document.querySelector(".balloon-container");
+
+            // Set random position for the balloon and ensure no collision with existing balloons
+            do {
+                const randomX = Math.random() * (window.innerWidth - 100);
+                const randomY = Math.random() * (window.innerHeight - 150);
+                balloon.style.left = randomX + "px";
+                balloon.style.top = randomY + "px";
+            } while (checkCollision(balloon, container.children));
+
+            container.appendChild(balloon);
+        }
+
+        function moveBalloonsAwayFromCursor(event) {
+            const cursorX = event.clientX;
+            const cursorY = event.clientY;
+            const balloons = document.querySelectorAll(".balloon");
+
+            balloons.forEach((balloon) => {
+                const balloonX = balloon.offsetLeft + 50; // Center X position of the balloon
+                const balloonY = balloon.offsetTop + 75; // Center Y position of the balloon
+
+                const distanceX = cursorX - balloonX;
+                const distanceY = cursorY - balloonY;
+
+                const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+                if (distance < 200) { // Adjust the value to control the repelling distance
+                    const directionX = -distanceX / distance; // Calculate the direction away from the cursor
+                    const directionY = -distanceY / distance;
+
+                    const moveAmount = 10; // Adjust the value to control the speed of repelling
+
+                    const newX = balloonX + directionX * moveAmount;
+                    const newY = balloonY + directionY * moveAmount;
+
+                    balloon.style.left = newX - 50 + "px";
+                    balloon.style.top = newY - 75 + "px";
+                }
+            });
+        }
+
+        // Create balloons at regular intervals
+        setInterval(createBalloon, 1000); // Add a new balloon every 1 second
+
+        // Add event listener to track mouse movement
+        document.addEventListener("mousemove", moveBalloonsAwayFromCursor);
+    </script>
+</body>
+</html>

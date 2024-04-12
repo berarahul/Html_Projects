@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Straight Line Road</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+
+            background-color: skyblue;
+        }
+
+        .road {
+            position: fixed;
+    top: 470px;
+    bottom: 423px;
+    left: 0;
+    width: 1900px;
+    background-color: gray;
+        }
+
+        .car {
+            position: relative;
+    width: 210px;
+    height: 100px;
+    background-color: #1E90FF;
+    border-radius: 8px;
+    margin-top: 349px;
+    right: -12px;
+    transform: translateX(0); /* Initial position, starting at the left side */
+            transition: transform 16s ease; 
+}
+        
+        .car::before,
+        .car::after {
+            content: '';
+            position: absolute;
+        }
+
+        .car::before {
+            width: 40px;
+    height: 40px;
+    background-color: rgb(78, 76, 76);
+    top: 81px;
+    left: 25px;
+    border-radius: 50%;
+}
+
+        .car::after {
+            width: 40px;
+    height: 40px;
+    background-color:  rgb(78, 76, 76);
+    top: 81px;
+    right: 25px;
+    border-radius: 55%;
+        }
+
+        .window1{
+            width: 18px;
+    height: 18px;
+    background-color: black;
+    position: relative;
+    top: 31px;
+    right: -32px;
+}
+
+.window2{
+    width: 18px;
+    height: 18px;
+    background-color: black;
+    position: relative;
+    top: 13px;
+    right: -71px
+}
+      
+
+.window3{
+   
+    width: 18px;
+    height: 18px;
+    background-color: black;
+    position: relative;
+    top: -5px;
+    right: -117px
+}
+      
+
+.window4{
+    width: 18px;
+    height: 18px;
+    background-color: black;
+    position: relative;
+    top: -23px;
+    right: -163px;
+}
+.button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 60px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            margin: 0 5px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="road"></div>
+    <div class="car">
+
+        <div class="window1"></div>
+    <div class="window2"></div>
+    <div class="window3"></div>
+    <div class="window4"></div>
+    </div>
+    <div class="button-container">
+    <button id="startButton" onclick="startMoving()">Start</button>
+    <button id="backButton" onclick="moveBack()" disabled>Back</button>
+    <button class="button" onclick="playHorn()">Horn</button>
+  
+</div>
+<audio id="hornSound" src="SnapInsta.io - Car Horn Sound Effect (128 kbps).mp3"></audio>
+</body>
+<script>
+
+
+    function startMoving() {
+
+       
+
+        var car = document.querySelector('.car');
+        car.style.transform = 'translateX(2000px)'; /* Move the car 300px to the right */
+        document.getElementById('startButton').disabled = true;
+            document.getElementById('backButton').disabled = false;
+    }
+
+
+    function moveBack() {
+
+
+            var car = document.querySelector('.car');
+            car.style.transform = 'translateX(0)'; /* Move the car back to the left */
+            document.getElementById('startButton').disabled = false;
+            document.getElementById('backButton').disabled = true;
+        }
+
+
+        function playHorn() {
+
+
+            var hornSound = document.getElementById('hornSound');
+            hornSound.play();
+        }
+
+
+
+  
+        
+    </script>
+</script>
+</html>
